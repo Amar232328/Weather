@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="main.css">
+</head>
+
+<body>
+    <h1>Lazy Weather App</h1>
+
+    <section class="weathercontainer">
+        <h2 id="weather_heading"></h2>
+        <p id="weather_data"></p>
+    </section>
+</body>
+<script>
+    async function app() {
+        const apikey = 'ae3eb17b37f3478192791c9386c0ec03';
+        const weather_container = document.getElementsByClassName('weathercontainer')[0];
+        const weather_heading = document.getElementById('weather_heading');
+        const weather_details = document.getElementById('weather_data');
+
+        try {
+            // Get user location from IP
+            const locationRes = await fetch(`https://api.geoapify.com/v1/ipinfo?&apiKey=${apikey}`);
+            const locationData = await locationRes.json();
+
+            const lat = locationData.location.latitude;
+            const long = locationData.location.longitude;
+            const state = locationData.state.name;
+            const country = locationData.country.name;
+            const city = locationData.city.name;
+
+            // Fetch weather data WITH HUMIDITY
+            const weatherRes = await fetch(
+                `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${long}&current_weather=true&hourly=relative_humidity_2m`
+            );
+            const weatherData = await weatherRes.json();
+
+            console.log(weatherData); // <-- check structure
+
+            const temp = weatherData.current_weather.temperature;
+            const condition = weatherData.current_weather.weathercode;
+
+            const humidity = weatherData.hourly.relative_humidity_2m[0]; // <-- humidity now works
+
+            const temp_fixed = (temp * 1.8) + 32;
+
+            // Display weather info
+            weather_heading.innerHTML = `${state}, ${city}, ${country}: ${temp_fixed.toFixed(1)}°F (code: ${condition})`;
+            weather_details.innerHTML = `Humidity: ${humidity}%`;
+
+            // Temp check
+            if (temp_fixed > 80) {
+                console.log('Above 80 degrees');
+            } else {
+                console.log('normal');
+            }
+
+        } catch (error) {
+            console.error('Error fetching data:', error);
+            weather_heading.style.color = 'red';
+            weather_heading.innerHTML = `
+                <b>Unable to get weather data ❌</b><br>
+                <small>${error.message}</small>
+            `;
+        }
+    }
+
+    app();
+</script>
+
+</html>

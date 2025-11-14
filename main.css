@@ -1,0 +1,46 @@
+html,
+body {
+    margin: 0px;
+    padding: 2px;
+    scroll-behavior: smooth;
+    box-sizing: content-box;
+    height: 100%;
+    overflow-x: hidden;
+    color: #fefefe;
+    background-color: rgb(47, 46, 45);
+}
+
+h1 {
+    color: white;
+    font-size: 55px;
+    text-align: center;
+
+}
+
+h2 {
+    color: white;
+
+}
+
+.weathercontainer {
+    display: flex;
+    justify-content: center;
+    margin: 3em auto;
+    background-color: rgb(24, 24, 24);
+    width: 24em;
+    padding: 1em;
+    text-align: center;
+    border-radius: 12px;
+    box-shadow: -1em 2em 5em rgb(58, 57, 57);
+}
+
+#weather_heading {
+    font-weight: 200;
+}
+
+#weather_data {
+    text-align: center;
+    width: fit-content;
+    height: fit-content;
+    padding: 0.2em;
+}
